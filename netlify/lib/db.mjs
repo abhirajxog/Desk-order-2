@@ -21,9 +21,10 @@ export function setStoreFactory(f) {
   _store = null;
 }
 
+// Never keep the store between requests: Netlify hands each request a short-lived Blobs token,
+// and a stored store would keep using an expired one ("Token expired").
 async function S() {
-  if (!_store) _store = await factory();
-  return _store;
+  return factory();
 }
 
 let clock = () => Date.now();
